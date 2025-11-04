@@ -1,0 +1,13 @@
+{
+  "name": "service2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js",
+    "generate-docs": "node generate-docs.js"
+  }
+  ,"devDependencies":{
+    "swagger-jsdoc":"^6.2.8"
+  }
+}
