@@ -1,0 +1,30 @@
+name: Docker CI
+on:
+  push:
+    branches:
+      - dev
+env:
+  IMAGE1: yourusername/min-tjanst:latest
+  IMAGE2: yourusername/min-tjanst-service2:latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build first service image
+        run: docker build -f ./docker-app/Dockerfile -t ${{ env.IMAGE1 }} ./docker-app
+      - name: Run tests in first service image
+        run: docker run --rm ${{ env.IMAGE1 }} npm test
+      - name: Build second service image
+        run: docker build -t ${{ env.IMAGE2 }} ./services/service2
+      - name: Run tests in second service image
+        run: docker run --rm ${{ env.IMAGE2 }} npm test
+
+  build-second-service:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test second service (parallel job)
+        run: |
+          docker build -t ${{ env.IMAGE2 }} ./services/service2
+          docker run --rm ${{ env.IMAGE2 }} npm test
